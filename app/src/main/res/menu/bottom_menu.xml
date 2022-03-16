@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/main_stream_page"
+        android:icon="@drawable/ic_homepage"
+        android:title="主页"/>
+
+    <item
+        android:id="@+id/favorite_page"
+        android:icon="@drawable/ic_like"
+        android:title="喜欢"/>
+</menu>
