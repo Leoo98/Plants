@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/blue</item>
+        <item name="colorPrimaryDark">@color/blue_dark</item>
+        <item name="colorAccent">@color/blue</item>
+    </style>
+
+    <style name="LikeButtonStyle" parent="Widget.AppCompat.ImageButton">
+        <item name="tint">@color/red</item>
+    </style>
+</resources>

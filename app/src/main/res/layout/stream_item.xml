@@ -1,49 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="120dp">
+    android:layout_height="120dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:layout_margin="10dp"
+    app:cardElevation="10dp">
 
-    <ImageView
-        android:id="@+id/plant_img"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="120dp">
 
-    <TextView
-        android:id="@+id/name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toEndOf="@+id/plant_img"
-        android:layout_alignTop="@+id/plant_img"
-        android:layout_marginStart="20dp"
-        android:text="author"/>
+        <ImageView
+            android:id="@+id/plant_img"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp" />
 
-    <TextView
-        android:id="@+id/area"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toEndOf="@+id/plant_img"
-        android:layout_alignBottom="@+id/plant_img"
-        android:layout_marginStart="20dp"
-        android:layout_marginBottom="10dp"
-        android:maxWidth="150dp"
-        android:text="假如这是一个超级超级长的描述"/>
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/plant_img"
+            android:layout_marginStart="20dp"
+            android:layout_toEndOf="@+id/plant_img"
+            android:text="author" />
 
-    <ImageButton
-        android:id="@+id/like_btn"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="30dp"
-        android:scaleType="centerInside"
-        android:src="@drawable/ic_unlike"
-        android:background="#00000000"
-        app:tint="#A9A9A9"/>
+        <TextView
+            android:id="@+id/area"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/plant_img"
+            android:layout_marginStart="20dp"
+            android:layout_marginBottom="10dp"
+            android:layout_toEndOf="@+id/plant_img"
+            android:maxWidth="150dp"
+            android:text="假如这是一个超级超级长的描述" />
+
+        <ImageButton
+            android:id="@+id/like_btn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="30dp"
+            android:background="#00000000"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_unlike"
+            style="@style/LikeButtonStyle" />
+    </RelativeLayout>
 
 
-
-</RelativeLayout>
+</androidx.cardview.widget.CardView>

@@ -45,14 +45,12 @@ class NetworkUtil private constructor(){
                 response: Response<PlantInfo>
             ) {
                 val result = response.body()
-
                 if(result != null)
                     result.result.plantList?.let { mainViewModel.updateList(it) }
             }
 
             override fun onFailure(call: Call<PlantInfo>, t: Throwable) {
                 Log.d("Zhaoxi", t.toString())
-                mainViewModel.updateList(ArrayList())
             }
         })
     }
@@ -80,6 +78,7 @@ class NetworkUtil private constructor(){
             override fun onFailure(call: Call<PlantInfo>, t: Throwable) {
                 Log.d("Zhaoxi", t.toString())
                 mainViewModel.removeLast()
+                mainViewModel.stopLoading()
             }
         })
     }

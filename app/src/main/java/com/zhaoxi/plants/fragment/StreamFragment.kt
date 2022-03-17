@@ -1,11 +1,15 @@
 package com.zhaoxi.plants.fragment
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -13,10 +17,7 @@ import com.zhaoxi.plants.R
 import com.zhaoxi.plants.adapter.PlantStreamAdapter
 import com.zhaoxi.plants.network.NetworkUtil
 import com.zhaoxi.plants.viewmodel.MainViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class StreamFragment: Fragment(R.layout.stream_fragment) {
 
@@ -24,6 +25,7 @@ class StreamFragment: Fragment(R.layout.stream_fragment) {
     private var viewModel: MainViewModel? = null
     private var adapter: PlantStreamAdapter? = null
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //define view model
@@ -31,12 +33,19 @@ class StreamFragment: Fragment(R.layout.stream_fragment) {
         //initialize recycler view
         initRecyclerView()
         initScrollListener()
-        //add line
-        plantStream.addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
         //initialize refresh
         val swipeRefreshLayout: SwipeRefreshLayout = requireView().findViewById(R.id.plant_swipe)
         swipeRefreshLayout.setOnRefreshListener {
             NetworkUtil.instance.refreshPlantList(viewModel!!)
+            checkNetworkConnection()
+            GlobalScope.launch {
+                delay(10000)
+                if(swipeRefreshLayout.isRefreshing){
+                    checkNetworkConnection()
+                    swipeRefreshLayout.isRefreshing = false
+                }
+
+            }
         }
         NetworkUtil.instance.refreshPlantList(viewModel!!)
         //view model observes the live data
@@ -83,8 +92,23 @@ class StreamFragment: Fragment(R.layout.stream_fragment) {
         val job = Job()
         val scope = CoroutineScope(job)
         scope.launch {
-            delay(500)
+            delay(2000)
             viewModel?.let { NetworkUtil.instance.loadMore(it) }
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun checkNetworkConnection(){
+        val connectManager = requireActivity().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo = connectManager.getNetworkCapabilities(connectManager.activeNetwork)
+        if(networkInfo == null)
+            Toast.makeText(requireActivity(),"No Internet Connection!",Toast.LENGTH_LONG).show()
+        networkInfo?.let {
+            when {
+                it.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> {
+                    Toast.makeText(requireActivity(),"You are using mobile data",Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 }
