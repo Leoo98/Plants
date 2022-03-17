@@ -6,12 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".activity.MainActivity"
     android:orientation="vertical">
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        app:title="@string/app_name"
-        android:background="@color/blue" />
+    <include layout="@layout/toolbar" />
+<!--    <androidx.appcompat.widget.Toolbar-->
+<!--        android:id="@+id/toolbar"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="60dp"-->
+<!--        app:title="@string/app_name"-->
+<!--        android:background="@color/blue" />-->
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/content"

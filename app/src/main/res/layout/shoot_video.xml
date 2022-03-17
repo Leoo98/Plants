@@ -3,12 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+    <include layout="@layout/toolbar"/>
     <FrameLayout
         android:id="@+id/preview_window"
         android:layout_weight="6"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginBottom="10dp"/>
+        android:layout_height="0dp" />
 
     <FrameLayout
         android:layout_weight="1"
@@ -17,8 +17,8 @@
 
         <Button
             android:id="@+id/shoot_video_btn"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:layout_gravity="center"
             android:layout_margin="10dp"
             android:text="录制">

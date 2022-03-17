@@ -30,6 +30,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val toolBar: androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar)
+        toolBar.navigationIcon = null
+        setSupportActionBar(toolBar)
         favoritePlantDao = FavoritePlantDatabase.getInstance(this).favoritePlantDao()!!
         viewModel = ViewModelProvider(this, MainViewModelFactory(favoritePlantDao)).get(MainViewModel::class.java)
         bottomNavigation = findViewById(R.id.bottom_nav)

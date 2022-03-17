@@ -18,6 +18,7 @@ import android.view.OrientationEventListener
 import android.widget.Button
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import com.zhaoxi.plants.R
 import java.io.File
@@ -69,9 +70,13 @@ class VideoShootActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.shoot_video)
+        val toolBar: Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolBar)
+        toolBar.setNavigationOnClickListener{
+            this.finish()
+        }
         ActivityCompat.requestPermissions(this, permissions, REQUEST_PERMISSIONS)
         plantName = intent.getStringExtra("plant_name")
-
         shootBtn = findViewById(R.id.shoot_video_btn)
         shootBtn?.setOnClickListener{
             if(isRecording){

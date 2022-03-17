@@ -31,6 +31,11 @@ class PlantDetailActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.plant_detail)
+        val toolbar: androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        toolbar.setNavigationOnClickListener{
+            this.finish()
+        }
         favoritePlantDao = FavoritePlantDatabase.getInstance(this).favoritePlantDao()!!
         detailViewModel = ViewModelProvider(this).get(DetailViewModel::class.java)
         val plantImageView: ImageView = findViewById(R.id.plant_img)
