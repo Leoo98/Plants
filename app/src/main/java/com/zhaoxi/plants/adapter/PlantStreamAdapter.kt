@@ -15,29 +15,30 @@ import com.zhaoxi.plants.activity.PlantDetailActivity
 import com.zhaoxi.plants.dao.FavoritePlantDao
 import com.zhaoxi.plants.database.FavoritePlantDatabase
 import com.zhaoxi.plants.model.Plant
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.firstOrNull
 
-class PlantStreamAdapter(private val context: Context, val editable: Boolean): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private var plantList:ArrayList<Plant?> = ArrayList()
+class PlantStreamAdapter(private val context: Context, val editable: Boolean) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    private var plantList: ArrayList<Plant?> = ArrayList()
     private val TYPE_COMMON = 0
     private val TYPE_FOOTER = 1
     private var favoritePlantDatabaseDao: FavoritePlantDao? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        if(viewType == TYPE_COMMON){
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.stream_item, parent, false)
+        if (viewType == TYPE_COMMON) {
+            val view =
+                LayoutInflater.from(parent.context).inflate(R.layout.stream_item, parent, false)
             return PlantStreamViewHolder(view)
-        }else{
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.footer_item, parent, false)
+        } else {
+            val view =
+                LayoutInflater.from(parent.context).inflate(R.layout.footer_item, parent, false)
             return PlantStreamFooterViewHolder(view)
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if(holder is PlantStreamViewHolder) {
+        if (holder is PlantStreamViewHolder) {
             val item = plantList[position]
             val url = item!!.coverURL
             holder.name.text = if (item.name == "") {
@@ -53,36 +54,50 @@ class PlantStreamAdapter(private val context: Context, val editable: Boolean): R
             Glide.with(context).load(url).diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.plantImg)
             GlobalScope.launch {
-                withContext(Dispatchers.Default) {
-                    favoritePlantDatabaseDao = FavoritePlantDatabase.getInstance(context).favoritePlantDao()
-                }
-                val record = favoritePlantDatabaseDao!!.getOneFavorite(item.plantId)
-                if(record == null){
-                    holder.likeBtn.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_unlike))
-                }else{
-                    holder.likeBtn.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_like))
+                favoritePlantDatabaseDao =
+                    FavoritePlantDatabase.getInstance(context).favoritePlantDao()
+                val record = favoritePlantDatabaseDao!!.getOneFavorite(item.plantId)?.firstOrNull()
+                if (record == null) {
+                    holder.likeBtn.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            context,
+                            R.drawable.ic_unlike
+                        )
+                    )
+                } else {
+                    holder.likeBtn.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            context,
+                            R.drawable.ic_like
+                        )
+                    )
                 }
             }
-            if(!editable){
+            if (!editable) {
                 holder.likeBtn.isEnabled = false
             }
-
-            holder.likeBtn.setOnClickListener{
+            holder.likeBtn.setOnClickListener {
                 it as ImageButton
-                if(holder.like){
+                if (holder.like) {
                     GlobalScope.launch {
-                        withContext(Dispatchers.Default) {
-                            val record = favoritePlantDatabaseDao!!.getOneFavorite(item.plantId)
-                            favoritePlantDatabaseDao!!.deleteOneFavorite(record!!)
+                        val record =
+                            favoritePlantDatabaseDao!!.getOneFavorite(item.plantId)?.firstOrNull()
+                        record?.let { it1 ->
+                            favoritePlantDatabaseDao!!.deleteOneFavorite(
+                                it1
+                            )
                         }
-                        it.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_unlike))
+                        it.setImageDrawable(
+                            ContextCompat.getDrawable(
+                                context,
+                                R.drawable.ic_unlike
+                            )
+                        )
                         holder.like = false
                     }
-                }else{
+                } else {
                     GlobalScope.launch {
-                        withContext(Dispatchers.Default) {
-                            favoritePlantDatabaseDao!!.insertOneFavorite(item)
-                        }
+                        favoritePlantDatabaseDao!!.insertOneFavorite(item)
                         it.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_like))
                         holder.like = true
                     }
@@ -96,7 +111,7 @@ class PlantStreamAdapter(private val context: Context, val editable: Boolean): R
                 intent.putExtra("plant_area", holder.area.text)
                 context.startActivity(intent)
             }
-        }else if(holder is PlantStreamFooterViewHolder){
+        } else if (holder is PlantStreamFooterViewHolder) {
             holder.progressBar.visibility = View.VISIBLE
         }
     }
@@ -106,14 +121,18 @@ class PlantStreamAdapter(private val context: Context, val editable: Boolean): R
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if(plantList[position] == null){TYPE_FOOTER}else{TYPE_COMMON}
+        return if (plantList[position] == null) {
+            TYPE_FOOTER
+        } else {
+            TYPE_COMMON
+        }
     }
 
-    fun updateStream(newPlantList: ArrayList<Plant?>){
-        if(newPlantList.size < plantList.size){
+    fun updateStream(newPlantList: ArrayList<Plant?>) {
+        if (newPlantList.size < plantList.size) {
             plantList = newPlantList
             notifyItemRemoved(plantList.size)
-        }else{
+        } else {
             plantList = newPlantList
             notifyDataSetChanged()
         }

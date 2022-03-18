@@ -1,21 +1,21 @@
 package com.zhaoxi.plants.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.zhaoxi.plants.model.Plant
+import kotlinx.coroutines.flow.Flow
 
 
 @Dao
 interface FavoritePlantDao {
     @Query("select * from favorite_plant where plant_id = :plantId")
-    fun getOneFavorite(plantId: Int): Plant?
+    fun getOneFavorite(plantId: Int): Flow<Plant?>?
 
     @Query("select * from favorite_plant")
-    fun getAllFavorite(): LiveData<MutableList<Plant?>>
+    fun getAllFavorite(): Flow<List<Plant?>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertOneFavorite(favoritePlant: Plant): Long
+    suspend fun insertOneFavorite(favoritePlant: Plant): Long
 
     @Delete
-    fun deleteOneFavorite(favoritePlant: Plant)
+    suspend fun deleteOneFavorite(favoritePlant: Plant)
 }

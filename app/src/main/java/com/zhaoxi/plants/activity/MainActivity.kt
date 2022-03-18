@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -21,7 +20,6 @@ import com.zhaoxi.plants.viewmodel.MainViewModelFactory
 class MainActivity : AppCompatActivity() {
 
     lateinit var streamFragment: StreamFragment
-    lateinit var fragmentTransaction: FragmentTransaction
     lateinit var favoriteFragment: FavoriteFragment
     lateinit var viewModel: MainViewModel
     lateinit var favoritePlantDao: FavoritePlantDao
@@ -78,11 +76,6 @@ class MainActivity : AppCompatActivity() {
         viewPager.adapter = plantFragmentAdapter
     }
 
-//    private fun changeFragment(fragment: Fragment) {
-//        fragmentTransaction = supportFragmentManager.beginTransaction()
-//        fragmentTransaction.replace(R.id.content_fragment, fragment)
-//        fragmentTransaction.commit()
-//    }
 
 
 }
