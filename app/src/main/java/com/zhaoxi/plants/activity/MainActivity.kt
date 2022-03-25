@@ -3,26 +3,27 @@ package com.zhaoxi.plants.activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.activity.viewModels
+
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.zhaoxi.plants.R
 import com.zhaoxi.plants.adapter.PlantFragmentPagerAdapter
 import com.zhaoxi.plants.dao.FavoritePlantDao
-import com.zhaoxi.plants.database.FavoritePlantDatabase
 import com.zhaoxi.plants.fragment.FavoriteFragment
 import com.zhaoxi.plants.fragment.StreamFragment
 import com.zhaoxi.plants.viewmodel.MainViewModel
-import com.zhaoxi.plants.viewmodel.MainViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-
+    @Inject
+    lateinit var favoritePlantDao: FavoritePlantDao
     lateinit var streamFragment: StreamFragment
     lateinit var favoriteFragment: FavoriteFragment
-    lateinit var viewModel: MainViewModel
-    lateinit var favoritePlantDao: FavoritePlantDao
+    val viewModel: MainViewModel by viewModels()
     lateinit var menuItem: MenuItem
     lateinit var bottomNavigation: BottomNavigationView
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,8 +32,6 @@ class MainActivity : AppCompatActivity() {
         val toolBar: androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar)
         toolBar.navigationIcon = null
         setSupportActionBar(toolBar)
-        favoritePlantDao = FavoritePlantDatabase.getInstance(this).favoritePlantDao()!!
-        viewModel = ViewModelProvider(this, MainViewModelFactory(favoritePlantDao)).get(MainViewModel::class.java)
         bottomNavigation = findViewById(R.id.bottom_nav)
         menuItem = bottomNavigation.menu.getItem(0);
         val viewPager: ViewPager = findViewById(R.id.content)

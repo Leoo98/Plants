@@ -5,34 +5,16 @@ import com.zhaoxi.plants.model.Plant
 import com.zhaoxi.plants.model.PlantInfo
 import com.zhaoxi.plants.service.PlantStreamService
 import com.zhaoxi.plants.viewmodel.MainViewModel
-import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class NetworkUtil private constructor(){
+@Singleton
+class NetworkUtil @Inject constructor(){
 
-    private val client = OkHttpClient.Builder()
-        .connectTimeout(10, TimeUnit.SECONDS)
-        .readTimeout(10, TimeUnit.SECONDS)
-        .writeTimeout(10, TimeUnit.SECONDS)
-        .build()
-
-    private val retrofit = Retrofit.Builder()
-        .client(client)
-        .baseUrl("https://api.apishop.net/")
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-
-    private val service: PlantStreamService = retrofit.create(PlantStreamService::class.java)
-
-    companion object{
-        val instance: NetworkUtil by lazy{
-            NetworkUtil()
-        }
-    }
+    @Inject
+    lateinit var service: PlantStreamService
 
     fun refreshPlantList(mainViewModel: MainViewModel){
         val page: Int = (1..5).random()

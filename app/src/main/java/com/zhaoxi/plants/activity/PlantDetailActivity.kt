@@ -7,25 +7,28 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.VideoView
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.zhaoxi.plants.R
 import com.zhaoxi.plants.dao.FavoritePlantDao
-import com.zhaoxi.plants.database.FavoritePlantDatabase
 import com.zhaoxi.plants.viewmodel.DetailViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class PlantDetailActivity: AppCompatActivity() {
     private lateinit var plantVideo: VideoView
-    private lateinit var detailViewModel: DetailViewModel
+    val detailViewModel: DetailViewModel by viewModels()
     private var mediaStorageDir: File? = null
     private var plantNameText: String? = null
     private var plantEnglishNameText: String? = null
     private var plantDescText: String? = null
     private var plantImgUrlText: String? = null
+    @Inject
     lateinit var favoritePlantDao: FavoritePlantDao
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,8 +39,6 @@ class PlantDetailActivity: AppCompatActivity() {
         toolbar.setNavigationOnClickListener{
             this.finish()
         }
-        favoritePlantDao = FavoritePlantDatabase.getInstance(this).favoritePlantDao()!!
-        detailViewModel = ViewModelProvider(this).get(DetailViewModel::class.java)
         val plantImageView: ImageView = findViewById(R.id.plant_img)
         val plantName: TextView = findViewById(R.id.plant_name)
         val plantEnglishName: TextView? = findViewById(R.id.plant_english_name)

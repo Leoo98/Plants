@@ -4,9 +4,12 @@ import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import java.io.File
+import javax.inject.Inject
 
-class DetailViewModel: ViewModel() {
+@HiltViewModel
+class DetailViewModel @Inject constructor(): ViewModel() {
     private val _videoPath = MutableLiveData<Uri>()
     val videoPath: LiveData<Uri> = _videoPath
 

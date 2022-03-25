@@ -6,8 +6,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import com.zhaoxi.plants.dao.FavoritePlantDao
 import com.zhaoxi.plants.model.Plant
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class MainViewModel(favoritePlantDao: FavoritePlantDao): ViewModel() {
+@HiltViewModel
+class MainViewModel @Inject constructor(favoritePlantDao: FavoritePlantDao): ViewModel() {
     private val _plantList = MutableLiveData<ArrayList<Plant?>>()
     val plantList:LiveData<ArrayList<Plant?>> = _plantList
     val favoritePlantList: LiveData<List<Plant?>> = favoritePlantDao.getAllFavorite().asLiveData()

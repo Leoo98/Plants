@@ -13,17 +13,15 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.zhaoxi.plants.R
 import com.zhaoxi.plants.activity.PlantDetailActivity
 import com.zhaoxi.plants.dao.FavoritePlantDao
-import com.zhaoxi.plants.database.FavoritePlantDatabase
 import com.zhaoxi.plants.model.Plant
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.firstOrNull
 
-class PlantStreamAdapter(private val context: Context, val editable: Boolean) :
+class PlantStreamAdapter constructor(private val context: Context, val editable: Boolean, val favoritePlantDao: FavoritePlantDao) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var plantList: ArrayList<Plant?> = ArrayList()
     private val TYPE_COMMON = 0
     private val TYPE_FOOTER = 1
-    private var favoritePlantDatabaseDao: FavoritePlantDao? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         if (viewType == TYPE_COMMON) {
@@ -54,9 +52,7 @@ class PlantStreamAdapter(private val context: Context, val editable: Boolean) :
             Glide.with(context).load(url).diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.plantImg)
             GlobalScope.launch {
-                favoritePlantDatabaseDao =
-                    FavoritePlantDatabase.getInstance(context).favoritePlantDao()
-                val record = favoritePlantDatabaseDao!!.getOneFavorite(item.plantId)?.firstOrNull()
+                val record = favoritePlantDao.getOneFavorite(item.plantId)?.firstOrNull()
                 if (record == null) {
                     holder.likeBtn.setImageDrawable(
                         ContextCompat.getDrawable(
@@ -81,9 +77,9 @@ class PlantStreamAdapter(private val context: Context, val editable: Boolean) :
                 if (holder.like) {
                     GlobalScope.launch {
                         val record =
-                            favoritePlantDatabaseDao!!.getOneFavorite(item.plantId)?.firstOrNull()
+                            favoritePlantDao.getOneFavorite(item.plantId)?.firstOrNull()
                         record?.let { it1 ->
-                            favoritePlantDatabaseDao!!.deleteOneFavorite(
+                            favoritePlantDao.deleteOneFavorite(
                                 it1
                             )
                         }
@@ -97,7 +93,7 @@ class PlantStreamAdapter(private val context: Context, val editable: Boolean) :
                     }
                 } else {
                     GlobalScope.launch {
-                        favoritePlantDatabaseDao!!.insertOneFavorite(item)
+                        favoritePlantDao.insertOneFavorite(item)
                         it.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_like))
                         holder.like = true
                     }
