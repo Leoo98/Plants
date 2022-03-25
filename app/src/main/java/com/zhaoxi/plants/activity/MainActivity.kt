@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity() {
         initViewPager(viewPager)
     }
 
-    fun initViewPager(viewPager: ViewPager){
+    private fun initViewPager(viewPager: ViewPager){
         streamFragment = StreamFragment()
         favoriteFragment = FavoriteFragment()
         val fragmentList = ArrayList<Fragment>()
